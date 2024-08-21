@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Car Inventory</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <a href="adminDashboard.html">
+        <button class="dashboard-btn">Dashboard</button>
+    </a>
+    <header>
+        <h1>Admin - Car Inventory Management</h1>
+    </header>
+    <main>
+        <section>
+            <h2>Add New Car</h2>
+            <form id="addCarForm">
+                <input type="text" id="make" placeholder="Make" required>
+                <input type="text" id="model" placeholder="Model" required>
+                <input type="number" id="year" placeholder="Year of Manufacture" required>
+                <input type="text" id="registration" placeholder="Registration Number" required>
+                <select id="fuelType" required>
+                    <option value="" disabled selected>Fuel Type</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Electric">Electric</option>
+                </select>
+                <input type="text" id="color" placeholder="Color" required>
+                <input type="number" id="price" placeholder="Price" required>
+                <textarea id="description" placeholder="Description"></textarea>
+                <button type="submit">Add Car</button>
+            </form>
+        </section>
+        <section>
+            <h2>Search Cars</h2>
+            <form id="searchForm">
+                <input type="text" id="searchMake" placeholder="Make">
+                <input type="text" id="searchModel" placeholder="Model">
+                <input type="number" id="searchYear" placeholder="Year">
+                <input type="text" id="searchRegistration" placeholder="Registration Number">
+                <button type="button" onclick="searchCars()">Search</button>
+            </form>
+        </section>
+        <section>
+            <h2>Update Car Details</h2>
+            <form id="updateCarForm" style="display: none;">
+                <input type="hidden" id="updateCarId">
+                <input type="text" id="updateMake" placeholder="Make" required>
+                <input type="text" id="updateModel" placeholder="Model" required>
+                <input type="number" id="updateYear" placeholder="Year of Manufacture" required>
+                <input type="text" id="updateRegistration" placeholder="Registration Number" required>
+                <select id="updateFuelType" required>
+                    <option value="" disabled selected>Fuel Type</option>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Electric">Electric</option>
+                </select>
+                <input type="text" id="updateColor" placeholder="Color" required>
+                <input type="number" id="updatePrice" placeholder="Price" required>
+                <textarea id="updateDescription" placeholder="Description"></textarea>
+                <button type="submit">Update Car</button>
+            </form>
+        </section>
+        <section>
+            <h2>Car Inventory</h2>
+            <table id="carTable">
+                <thead>
+                    <tr>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Registration</th>
+                        <th>Fuel Type</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Car data will be populated here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <script>
+       document.addEventListener('DOMContentLoaded', () => {
+        fetchCars();
+
+        function fetchCars(query = '') {
+            fetch(`/api/cars${query}`)
+                .then(response => response.json())
+                .then(cars => {
+                    const tableBody = document.querySelector('#carTable tbody');
+                    tableBody.innerHTML = cars.map(car => `
+                        <tr>
+                            <td>${car.make}</td>
+                            <td>${car.model}</td>
+                            <td>${car.year}</td>
+                            <td>${car.registration}</td>
+                            <td>${car.fuelType}</td>
+                            <td>${car.color}</td>
+                            <td>${car.price}</td>
+                            <td>${car.description}</td>
+                            <td>
+                                <button onclick="editCar('${car._id}')">Edit</button>
+                                <button onclick="deleteCar('${car._id}')">Delete</button>
+                            </td>
+                        </tr>
+                    `).join('');
+                })
+                .catch(err => console.error('Error fetching cars:', err));
+        }
+
+        window.searchCars = () => {
+            const make = document.querySelector('#searchMake').value;
+            const model = document.querySelector('#searchModel').value;
+            const year = document.querySelector('#searchYear').value;
+            const registration = document.querySelector('#searchRegistration').value;
+
+            const query = new URLSearchParams({ make, model, year, registration }).toString();
+            fetchCars(query ? `?${query}` : '');
+        };
+
+        window.editCar = (id) => {
+            fetch(`/api/cars/${id}`)
+                .then(response => response.json())
+                .then(car => {
+                    document.querySelector('#updateCarId').value = car._id;
+                    document.querySelector('#updateMake').value = car.make;
+                    document.querySelector('#updateModel').value = car.model;
+                    document.querySelector('#updateYear').value = car.year;
+                    document.querySelector('#updateRegistration').value = car.registration;
+                    document.querySelector('#updateFuelType').value = car.fuelType;
+                    document.querySelector('#updateColor').value = car.color;
+                    document.querySelector('#updatePrice').value = car.price;
+                    document.querySelector('#updateDescription').value = car.description;
+
+                    document.querySelector('#updateCarForm').style.display = 'block';
+                })
+                .catch(err => console.error('Error fetching car details:', err));
+        };
+
+        document.querySelector('#updateCarForm').addEventListener('submit', (event) => {
+            event.preventDefault();
+            const carId = document.querySelector('#updateCarId').value;
+            const updatedCar = {
+                make: document.querySelector('#updateMake').value,
+                model: document.querySelector('#updateModel').value,
+                year: document.querySelector('#updateYear').value,
+                registration: document.querySelector('#updateRegistration').value,
+                fuelType: document.querySelector('#updateFuelType').value,
+                color: document.querySelector('#updateColor').value,
+                price: document.querySelector('#updatePrice').value,
+                description: document.querySelector('#updateDescription').value
+            };
+
+            console.log('Updating car:', carId, updatedCar); // Debugging statement
+
+            fetch(`/api/cars/${carId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedCar)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Car updated successfully!') {
+                    alert('Car updated successfully!');
+                    fetchCars();
+                    document.querySelector('#updateCarForm').reset();
+                    document.querySelector('#updateCarForm').style.display = 'none';
+                } else {
+                    alert('Failed to update car: ' + data.message);
+                }
+            })
+            .catch(err => console.error('Error updating car:', err));
+        });
+
+        window.deleteCar = (id) => {
+            fetch(`/api/cars/${id}`, { method: 'DELETE' })
+            .then(() => {
+                alert('Car deleted successfully!');
+                fetchCars();
+            })
+            .catch(err => console.error('Error deleting car:', err));
+        };
+    });
+
+    document.querySelector('#addCarForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const formData = {
+            make: document.querySelector('#make').value,
+            model: document.querySelector('#model').value,
+            year: document.querySelector('#year').value,
+            registration: document.querySelector('#registration').value,
+            fuelType: document.querySelector('#fuelType').value,
+            color: document.querySelector('#color').value,
+            price: document.querySelector('#price').value,
+            description: document.querySelector('#description').value
+        };
+
+        console.log('Adding car:', formData); // Debugging statement
+
+        fetch('/api/cars', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('Car added successfully!');
+            fetchCars();
+            document.querySelector('#addCarForm').reset();
+        })
+        .catch(err => console.error('Error adding car:', err));
+    });
+    </script>
+</body>
+</html>

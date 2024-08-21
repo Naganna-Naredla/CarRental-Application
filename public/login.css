@@ -1,0 +1,71 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #000; /* Black background */
+    color: #fff; /* White text color */
+}
+
+header {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    margin: 0;
+}
+
+/* Login Section */
+#login {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 40px); /* Adjust based on header height */
+}
+
+#login form {
+    background-color: #ffd700; /* Gold background */
+    color: #000; /* Black text color */
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px; /* Adjust width as needed */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#login form label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+#login form input,
+#login form select {
+    width: calc(100% - 20px); /* Adjust to fit padding */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+#login form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #000;
+    color: #ffd700; /* Gold text color */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#login form button:hover {
+    background-color: #333;
+}
+
+#login form input:focus,
+#login form select:focus {
+    outline: none;
+    border-color: #ffd700; /* Gold border on focus */
+}

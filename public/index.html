@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style.css">
+    <script src="script.js" defer></script>
+    <title>Car Rental Service</title>
+</head>
+<body>
+
+    <header>
+        <div class="header-content">
+            <div class="navbar-brand">
+                <a href="#Home">
+                    <img src="logo.png" alt="Car_rental logo">
+                </a>
+            </div>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Car Rental...">
+                <button class="search-icon" id="searchButton">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            <nav class="navbar-menu">
+                <a href="#Home" class="nav-link">Home</a>
+                <a href="#services" class="nav-link">Services</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#contact" class="nav-link">Contact</a>
+                <a href="login.html" class="nav-link login-button"><button id="login-btn">Login</button></a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="Home">
+            <div class="carousel">
+                <div class="carousel-item">
+                    <img src="image1.png" alt="Image 1">
+                    <div class="overlay">
+                        <h2>Welcome to Car Deal</h2>
+                        <p>Your ultimate search for car.</p>
+                        <a href="start.html" class="button">Book a Trail</a>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="image2.jpg" alt="Image 2">
+                    <div class="overlay">
+                        <h2>Affordable Rates, Premium Service.</h2>
+                        <p>Get the best value for your money with our unbeatable rental deals.</p>
+                        <a href="start.html" class="button">Book a Trail</a>
+                    </div>
+                </div>
+
+                    <div class="carousel-item">
+                        <img src="image3.png" alt="Image 3">
+                        <div class="overlay">
+                            <h2>Luxury and Comfort</h2>
+                            <p>Experience the road like never before with our premium car rentals.</p>
+                            <a href="start.html" class="button">Book a Trail</a>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                        <img src="image4.png" alt="Image 4">
+                        <div class="overlay">
+                            <h2>Drive in Style</h2>
+                            <p>Choose from our diverse fleet of stylish and reliable vehicles.</p>
+                            <a href="start.html" class="button">Book a Trail</a>
+                        </div>
+                    </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-control prev" onclick="moveCarousel(-1)">&#10094;</button>
+                <button class="carousel-control next" onclick="moveCarousel(1)">&#10095;</button>
+            </div>
+            <div class="carousel-dots">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <span class="dot" onclick="currentSlide(4)"></span>
+            </div>
+    </main>
+
+<section id="about">
+    <div class="container">
+        <div class="about-content">
+            <h2>About Us</h2>
+            <p>
+                Welcome to CAR DEAL, where we offer a wide range of vehicles to suit every journey. Whether you're planning a weekend getaway or need a reliable car for business, we've got you covered. Our commitment is to provide top-quality service, ensuring that every rental experience is smooth and hassle-free.
+            </p>
+            <p>
+                With years of experience in the car rental industry, we understand the importance of offering flexible options and competitive prices. Our fleet is regularly updated, so you can always expect a clean, well-maintained vehicle. Plus, our user-friendly booking system makes it easier than ever to find the right car at the right price.
+            </p>
+            <p>
+                We're dedicated to customer satisfaction, and our team is here to assist you every step of the way. Trust us to get you on the road with confidence, knowing that you're in good hands.
+            </p>
+        </div>
+        
+    </div>
+</section>
+
+    
+</body>
+</html>

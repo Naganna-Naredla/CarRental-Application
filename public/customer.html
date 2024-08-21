@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Rental - Customer</title>
+    <link rel="stylesheet" href="customer.css">
+</head>
+<body>
+    <h1>Book a Car</h1>
+
+    <form id="bookingForm">
+        <label for="carName">Car Name:</label>
+        <input type="text" id="carName" placeholder="Car Name" required>
+        <br>
+        <label for="customerName">Your Name:</label>
+        <input type="text" id="customerName" placeholder="Your Name" required>
+        <br>
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" required>
+        <br>
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" required>
+        <br>
+        <label for="customerEmail">Your Email:</label>
+    <input type="email" id="customerEmail" name="customerEmail" required>
+    <br>
+    <button type="submit">Book Now</button>
+    </form>
+    <h1>Rate a Car</h1>
+
+    <form id="reviewForm">
+        <label for="carName">Car Name:</label>
+        <input type="text" id="carName" placeholder="Car Name" required>
+        <br>
+        <label for="rating">Rating (1-5):</label>
+        <input type="number" id="rating" min="1" max="5" required>
+        <br>
+        <button type="submit">Submit Rating</button>
+    </form>
+
+    <div id="feedback"></div>
+
+    <script>
+        document.querySelector('#bookingForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const bookingData = {
+                carName: document.querySelector('#carName').value,
+                customerName: document.querySelector('#customerName').value,
+                startDate: document.querySelector('#startDate').value,
+                endDate: document.querySelector('#endDate').value,
+            };
+
+            try {
+                const response = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bookingData)
+                });
+
+                const result = await response.json();
+                const feedbackElement = document.querySelector('#feedback');
+
+                if (response.ok) {
+                    feedbackElement.innerHTML = `<p>${result.message}</p>`;
+                } else {
+                    feedbackElement.innerHTML = `<p>${result.message}</p>`;
+                    if (result.availableCars && result.availableCars.length) {
+                        feedbackElement.innerHTML += `<p>Other available cars:</p><ul>`;
+                        result.availableCars.forEach(car => {
+                            feedbackElement.innerHTML += `<li>${car.make} ${car.model}</li>`;
+                        });
+                        feedbackElement.innerHTML += `</ul>`;
+                    }
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.querySelector('#feedback').innerHTML = '<p>Error making the booking. Please try again.</p>';
+            }
+        });
+
+        document.querySelector('#reviewForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const reviewData = {
+                carName: document.querySelector('#carName').value,
+                rating: document.querySelector('#rating').value,
+            };
+
+            try {
+                const response = await fetch('/rate-car', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(reviewData)
+                });
+
+                const result = await response.json();
+                const feedbackElement = document.querySelector('#feedback');
+
+                if (response.ok) {
+                    feedbackElement.innerHTML = `<p>${result.message}</p>`;
+                } else {
+                    feedbackElement.innerHTML = `<p>${result.message}</p>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.querySelector('#feedback').innerHTML = '<p></p>';
+            }
+        });
+    </script>
+</body>
+</html>

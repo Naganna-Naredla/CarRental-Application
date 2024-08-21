@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings</title>
+    <style>
+        /* Add styles for the cancel button */
+        .cancel-button {
+            background-color: #f44336; /* Red */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Bookings</h1>
+    <div id="bookings-list">
+        <!-- Booking entries will be populated here -->
+    </div>
+
+    <script>
+        // Fetch bookings and display them
+        fetch('/api/bookings')
+            .then(response => response.json())
+            .then(bookings => {
+                const bookingsList = document.getElementById('bookings-list');
+                bookings.forEach(booking => {
+                    const bookingDiv = document.createElement('div');
+                    bookingDiv.innerHTML = `
+                        <p>Car ID: ${booking.carId}<br>Status: ${booking.status}<br>Dates: ${booking.startDate} to ${booking.endDate}</p>
+                        <button class="cancel-button" onclick="cancelBooking('${booking._id}')">Cancel Booking</button>
+                    `;
+                    bookingsList.appendChild(bookingDiv);
+                });
+            });
+
+        // Function to cancel a booking
+        function cancelBooking(bookingId) {
+            fetch(`/api/bookings/${bookingId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Booking cancelled successfully');
+                    location.reload(); // Reload the page to reflect changes
+                } else {
+                    return response.text().then(text => alert(`Error: ${text}`));
+                }
+            })
+            .catch(error => alert('Error: ' + error.message));
+        }
+    </script>
+</body>
+</html>

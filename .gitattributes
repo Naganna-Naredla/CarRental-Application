@@ -1,0 +1,2 @@
+* text=auto
+*.jpeg filter=lfs diff=lfs merge=lfs -text
